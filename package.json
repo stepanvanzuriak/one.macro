@@ -1,0 +1,20 @@
+{
+  "name": "one.macro",
+  "version": "0.1.0",
+  "description": "One macro to rule them all",
+  "main": "one.macro.js",
+  "repository": "https://github.com/stepanvanzuriak/one.macro",
+  "author": "Stepan Vanzuriak <stepanvanzuriak@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@babel/types": "^7.16.8",
+    "babel-plugin-macros": "^3.1.0"
+  },
+  "scripts": {
+    "test": "babel --plugins babel-plugin-macros ./test.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
+}
