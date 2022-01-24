@@ -1,7 +1,17 @@
-import {overload} from "./one.macro.js"
+import { overload, when } from "./one.macro.js";
 
-
-const a = overload(
-    a => a, 
-    (a, b) => a + b
+const greet = overload(
+  (firstName, lastName) => firstName + " " + lastName,
+  when(
+    (type) => type === "formal",
+    (_, firstName, lastName) => {
+      console.log(`Greetings ${firstName} ${lastName}`);
+    }
+  ),
+  when(
+    (type) => type === "informal",
+    (_, firstName, lastName) => {
+      console.log(`Hi ${firstName} ${lastName}`);
+    }
+  )
 );
