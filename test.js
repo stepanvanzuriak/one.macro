@@ -1,17 +1,18 @@
 import { overload, when } from "./one.macro.js";
 
+const isJohnSnow = (_, firstName, lastName) => firstName === "John" && lastName === "Snow"
+
 const greet = overload(
-  (firstName, lastName) => firstName + " " + lastName,
+  (type = "formal", firstName, lastName) => {
+    console.log(`Greetings ${firstName} ${lastName}`);
+  },
+  (type = "informal", firstName, lastName) => {
+    console.log(`Hi ${firstName} ${lastName}`);
+  },
   when(
-    (type) => type === "formal",
-    (_, firstName, lastName) => {
-      console.log(`Greetings ${firstName} ${lastName}`);
-    }
-  ),
-  when(
-    (type) => type === "informal",
-    (_, firstName, lastName) => {
-      console.log(`Hi ${firstName} ${lastName}`);
+    isJohnSnow,
+    () => {
+      console.log("Winter is coming!");
     }
   )
 );
