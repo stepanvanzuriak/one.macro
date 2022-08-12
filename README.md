@@ -1,5 +1,3 @@
-Done in macros exploration proposes
-
 ## overload
 
 ### Trivial example
