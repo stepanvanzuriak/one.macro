@@ -8,12 +8,16 @@ pluginTester({
   babelOptions: {filename: __filename},
   tests: [
     {
-      fixture:  path.join(__dirname, '__fixtures__/base/base.js'),
-      outputFixture: path.join(__dirname, '__fixtures__/base/base-output.js'),
+      fixture:  path.join(__dirname, '__fixtures__/overload/base/base.js'),
+      outputFixture: path.join(__dirname, '__fixtures__/overload/base/base-output.js'),
     },
     {
-      fixture:  path.join(__dirname, '__fixtures__/when/when.js'),
-      outputFixture: path.join(__dirname, '__fixtures__/when/when-output.js'),
+      fixture:  path.join(__dirname, '__fixtures__/overload/when/when.js'),
+      outputFixture: path.join(__dirname, '__fixtures__/overload/when/when-output.js'),
+    },
+    {
+      fixture:  path.join(__dirname, '__fixtures__/overload/reduce/reduce.js'),
+      outputFixture: path.join(__dirname, '__fixtures__/overload/reduce/reduce-output.js'),
     },
   ],
 })

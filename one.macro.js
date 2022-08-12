@@ -1,6 +1,17 @@
 const { createMacro } = require('babel-plugin-macros');
 
 function inlineGuardToExp(guard, t) {
+  // To compare arrays
+  if (t.isArrayExpression(guard.right)) {
+    // TODO: Double check this
+    return  t.binaryExpression(
+      '===',
+      t.callExpression(t.identifier('JSON.stringify'), [t.identifier(`arguments[${guard.__oneMacroIndex}]`)]),
+      t.callExpression(t.identifier('JSON.stringify'), [guard.right]),
+    );
+  } 
+
+
   return t.binaryExpression(
     '===',
     t.identifier(`arguments[${guard.__oneMacroIndex}]`),
@@ -12,8 +23,13 @@ function getGuardName(inlineGuards, t) {
   return inlineGuards
     .map((el) => {
       let name = el.right.value;
+
       if (t.isIdentifier(el.right)) {
         name = el.right.name;
+      }
+
+      if (t.isArrayExpression(el.right)) {
+        name = 'arrayExpression'
       }
 
       return String(name).split(' ').join('_');
@@ -32,7 +48,7 @@ const methods = {
 
       referencePath.parentPath.node.arguments.forEach((element, index) => {
         if (t.isArrowFunctionExpression(element)) {
-          let key = element.params.length;
+          let key = element.params.length + "_" + element.params.map(param => param.type[0]).join("");
 
           const inlineGuards = element.params
             .map((el, index) => {
@@ -48,7 +64,7 @@ const methods = {
             key += `__${uniqInlineGuardsKey}`;
           }
 
-          functionsMap[key] = { element, inlineGuards };
+          functionsMap[key] = { element, inlineGuards, paramsLength: element.params.length  };
         } else if (
           t.isCallExpression(element) &&
           element.callee.name === 'when'
@@ -124,7 +140,7 @@ const methods = {
                   }, null);
               }
 
-              const numberOfParams = Number(key.split('__')[0]);
+              const numberOfParams = val.paramsLength;
 
               const ifExp = extraChecks
                 ? t.logicalExpression(

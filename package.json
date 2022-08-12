@@ -12,7 +12,7 @@
     "babel-plugin-macros": "^3.1.0"
   },
   "scripts": {
-    "run": "babel --plugins babel-plugin-macros ./test.js --out-file ./test_code_gen.js",
+    "playground": "babel --plugins babel-plugin-macros ./playground/input.js --out-file ./playground/output.js",
     "test": "jest"
   },
   "devDependencies": {
