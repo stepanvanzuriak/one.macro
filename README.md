@@ -1,4 +1,5 @@
-## Posible "guardless" solution 
+
+## overload + when
 
 ```js
 const cond = (a) => a;
