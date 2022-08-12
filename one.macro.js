@@ -1,11 +1,24 @@
-const { createMacro } = require("babel-plugin-macros");
+const { createMacro } = require('babel-plugin-macros');
 
 function inlineGuardToExp(guard, t) {
   return t.binaryExpression(
-    "===",
+    '===',
     t.identifier(`arguments[${guard.__oneMacroIndex}]`),
-    guard.right
+    guard.right,
   );
+}
+
+function getGuardName(inlineGuards, t) {
+  return inlineGuards
+    .map((el) => {
+      let name = el.right.value;
+      if (t.isIdentifier(el.right)) {
+        name = el.right.name;
+      }
+
+      return String(name).split(' ').join('_');
+    })
+    .join('__');
 }
 
 const methods = {
@@ -14,7 +27,7 @@ const methods = {
     references.map((referencePath) => {
       const functionsMap = {};
       const guards = [];
-
+      
       const overloadFunctionName = referencePath.parentPath.container.id.name;
 
       referencePath.parentPath.node.arguments.forEach((element, index) => {
@@ -31,14 +44,14 @@ const methods = {
             .filter(t.isAssignmentPattern);
 
           if (inlineGuards.length) {
-            uniqInlineGuardsKey = inlineGuards.map(el => String(el.right.value)).join("__")
+            uniqInlineGuardsKey = getGuardName(inlineGuards, t);
             key += `__${uniqInlineGuardsKey}`;
           }
 
           functionsMap[key] = { element, inlineGuards };
         } else if (
           t.isCallExpression(element) &&
-          element.callee.name === "when"
+          element.callee.name === 'when'
         ) {
           functionsMap[`with__guard__${index}`] = {
             element: element.arguments[1],
@@ -52,17 +65,17 @@ const methods = {
 
       const overloadedFunctions = Object.entries(functionsMap).flatMap(
         ([key, func]) => {
-          return t.variableDeclaration("const", [
+          return t.variableDeclaration('const', [
             t.variableDeclarator(
               t.identifier(`${overloadFunctionName}__${key}`),
-              func.element
+              func.element,
             ),
           ]);
-        }
+        },
       );
 
       const definedGuards = guards.map((el) => {
-        return t.variableDeclaration("const", [
+        return t.variableDeclaration('const', [
           t.variableDeclarator(t.identifier(el.key), el.func),
         ]);
       });
@@ -77,19 +90,19 @@ const methods = {
           [],
           t.blockStatement(
             Object.entries(functionsMap).map(([key, val]) => {
-              if (key.startsWith("with__guard")) {
-                const numberOfParams = key.split("__")[2];
+              if (key.startsWith('with__guard')) {
+                const numberOfParams = key.split('__')[2];
                 return t.ifStatement(
                   t.identifier(
-                    `${overloadFunctionName}__guard__${numberOfParams}.apply(undefined, arguments)`
+                    `${overloadFunctionName}__guard__${numberOfParams}.apply(undefined, arguments)`,
                   ),
                   t.blockStatement([
                     t.returnStatement(
                       t.identifier(
-                        `${overloadFunctionName}__${key}.apply(undefined, arguments)`
-                      )
+                        `${overloadFunctionName}__${key}.apply(undefined, arguments)`,
+                      ),
                     ),
-                  ])
+                  ]),
                 );
               }
 
@@ -103,26 +116,26 @@ const methods = {
                       return el;
                     }
 
-                    return t.logicalExpression("&&", el, a);
+                    return t.logicalExpression('&&', el, a);
                   }, null);
               }
 
-              const numberOfParams = Number(key.split("__")[0]);
+              const numberOfParams = Number(key.split('__')[0]);
 
               const ifExp = extraChecks
                 ? t.logicalExpression(
-                    "&&",
+                    '&&',
                     t.binaryExpression(
-                      "===",
-                      t.identifier("arguments.length"),
-                      t.numericLiteral(numberOfParams)
+                      '===',
+                      t.identifier('arguments.length'),
+                      t.numericLiteral(numberOfParams),
                     ),
-                    extraChecks
+                    extraChecks,
                   )
                 : t.binaryExpression(
-                    "===",
-                    t.identifier("arguments.length"),
-                    t.numericLiteral(numberOfParams)
+                    '===',
+                    t.identifier('arguments.length'),
+                    t.numericLiteral(numberOfParams),
                   );
 
               return t.ifStatement(
@@ -130,14 +143,14 @@ const methods = {
                 t.blockStatement([
                   t.returnStatement(
                     t.identifier(
-                      `${overloadFunctionName}__${key}.apply(undefined, arguments)`
-                    )
+                      `${overloadFunctionName}__${key}.apply(undefined, arguments)`,
+                    ),
                   ),
-                ])
+                ]),
               );
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     });
   },

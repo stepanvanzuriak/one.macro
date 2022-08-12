@@ -12,9 +12,12 @@
     "babel-plugin-macros": "^3.1.0"
   },
   "scripts": {
-    "test": "babel --plugins babel-plugin-macros ./test.js"
+    "run": "babel --plugins babel-plugin-macros ./test.js --out-file ./test_code_gen.js",
+    "test": "jest"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0"
+    "babel-cli": "^6.26.0",
+    "babel-plugin-tester": "^10.1.0",
+    "jest": "^28.1.3"
   }
 }
