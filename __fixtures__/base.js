@@ -1,8 +1,10 @@
 import { overload } from '../one.macro';
 
 const base = overload(
-  (a) => console.log('1'),
-  (a, b) => console.log('2'),
+  (a) => '1',
+  (a, b) => '2',
+  (a, b, c) => '3',
+  (special = "sure") => "yeah",
 );
 
 module.exports = base;

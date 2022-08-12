@@ -89,7 +89,10 @@ const methods = {
           t.identifier(overloadFunctionName),
           [],
           t.blockStatement(
-            Object.entries(functionsMap).map(([key, val]) => {
+            Object.entries(functionsMap)
+            // Sort by inline guards complexity
+            .sort((a, b) => b[1].inlineGuards.length - a[1].inlineGuards.length)
+            .map(([key, val]) => {
               if (key.startsWith('with__guard')) {
                 const numberOfParams = key.split('__')[2];
                 return t.ifStatement(
