@@ -1,6 +1,8 @@
 ## Posible "guardless" solution 
 
 ```js
+const cond = (a) => a;
+
 const greet = overload(
   (firstName, lastName) => firstName + " " + lastName,
   
@@ -15,5 +17,9 @@ const greet = overload(
   ({type = "informal", b, c}) => {
 	return b + c;
  },
+ when(
+  cond,
+  () => 12,
+ )
 );
 ```

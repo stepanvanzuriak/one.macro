@@ -55,6 +55,7 @@ const methods = {
         ) {
           functionsMap[`with__guard__${index}`] = {
             element: element.arguments[1],
+            inlineGuards: [],
           };
           guards.push({
             key: `${overloadFunctionName}__guard__${index}`,

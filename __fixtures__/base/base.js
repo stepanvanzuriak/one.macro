@@ -1,4 +1,4 @@
-import { overload } from '../one.macro';
+import { overload } from '../../one.macro';
 
 const base = overload(
   (a) => '1',
