@@ -11,7 +11,7 @@ import { guard } from 'one.macro';
 
 
 function earlyReturn(value, flag) {
-  guard(!value && !flag, "Required");
+  guard(value || flag, "Required");
   guard(value > 12);
 
   return "Fine";
