@@ -1,3 +1,28 @@
+# one.macro 
+
+Collection of macros developed for learning purpose
+
+## guard
+
+### Trivial example
+
+```js
+import { guard } from 'one.macro';
+
+
+function earlyReturn(value, flag) {
+  guard(!value && !flag, "Required");
+  guard(value > 12);
+
+  return "Fine";
+}
+
+earlyReturn(10); // returns undefined
+earlyReturn(100); // returns "Fine"
+earlyReturn(); // returns "Required"
+
+```
+
 ## overload
 
 ### Trivial example

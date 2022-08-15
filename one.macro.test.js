@@ -19,5 +19,9 @@ pluginTester({
       fixture:  path.join(__dirname, '__fixtures__/overload/reduce/reduce.js'),
       outputFixture: path.join(__dirname, '__fixtures__/overload/reduce/reduce-output.js'),
     },
+    {
+      fixture:  path.join(__dirname, '__fixtures__/guard/base/base.js'),
+      outputFixture: path.join(__dirname, '__fixtures__/guard/base/base-output.js'),
+    },
   ],
 })
