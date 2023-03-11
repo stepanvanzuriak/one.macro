@@ -46,7 +46,7 @@ const methods = {
         .getStatementParent()
         .replaceWith(
           t.ifStatement(
-            t.unaryExpression("!", referencePath.container.arguments[0]),
+            t.unaryExpression('!', referencePath.container.arguments[0]),
             t.returnStatement(referencePath.container.arguments[1]),
           ),
         );
